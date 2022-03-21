@@ -10,8 +10,11 @@ contract Delegation {
   Delegate delegate;
 
   constructor(address _delegateAddress) {
-    delegate = Delegate(_delegateAddress); // custom address
+    //delegate = Delegate(_delegateAddress); // custom address. Is this a valid way to create contract?
+    delegate = new Delegate(_delegateAddress);
     owner = msg.sender;
+    console.log("address of Delegate contract", address(delegate));
+    console.log("within constructor() of Delegation contract", owner);
   }
 
   fallback() external { // execute when msg.data is not empty and receive is not defined

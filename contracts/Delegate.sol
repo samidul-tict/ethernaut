@@ -8,6 +8,7 @@ contract Delegate {
   address public owner;
 
   constructor(address _owner) {
+    console.log("within constructor() of Delegate contract", _owner); // why this line is not being prited during instantiation of the contract?
     owner = _owner;
   }
 
