@@ -11,6 +11,7 @@ contract Fallback {
   constructor() {
     owner = payable(msg.sender);
     contributions[msg.sender] = 1000 * (1 ether);
+    console.log("contract's owner: ", owner);
   }
 
   modifier onlyOwner {
@@ -40,8 +41,9 @@ contract Fallback {
   }
 
   receive() external payable { // execute when msg.data is empty
-    console.log("within receive()");
+    console.log("within receive(): ", msg.sender, msg.value);
     require(msg.value > 0 && contributions[msg.sender] > 0);
     owner = payable(msg.sender);
+    console.log("contract's new owner: ", owner);
   }
 }

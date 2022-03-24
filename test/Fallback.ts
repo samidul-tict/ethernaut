@@ -8,48 +8,36 @@ describe("Fallback", function () {
 
     let fb: Fallback;
     let owner: SignerWithAddress;
-    let bob: SignerWithAddress;
     let sami: SignerWithAddress;
 
-    this.beforeEach(async function() {
-        [owner, bob, sami] = await ethers.getSigners();
+    this.beforeAll(async function() {
+        [owner, sami] = await ethers.getSigners();
         const Fallback = await ethers.getContractFactory("Fallback");
         fb = (await Fallback.connect(owner).deploy()) as Fallback;
         await fb.deployed();
+        console.log("contract address: ", fb.address);
     });
 
-    it("contribute and validate", async function () {
+    it("contribute", async function() {
         
-        await fb.connect(owner).contribute({value:ethers.utils.parseEther("0.0001")});
-        await fb.connect(bob).contribute({value:ethers.utils.parseEther("0.0001")});
         await fb.connect(sami).contribute({value:ethers.utils.parseEther("0.0001")});
-        
-        let ownerContribution = await fb.connect(owner).getContribution();
-        let bobContribution = await fb.connect(bob).getContribution();
         let samiContribution = await fb.connect(sami).getContribution();
 
-        console.log("contribution: %u %u %u", ownerContribution, bobContribution, samiContribution);
+        console.log("sami's contribution: ", samiContribution);
     });
 
-    it("try to withdraw", async function () {
-        
-        await fb.connect(owner).withdraw();
-        try {
-            expect (await fb.connect(sami).withdraw()).to.be.revertedWith("caller is not the owner");
-        } catch {
-            console.log("sami is not the owner", sami.address);
-        }
+    it("transfer and change the owner", async function () {
+        const tx = {
+            to: fb.address,
+            value: ethers.utils.parseEther("1.0")
+          }
+          
+        await sami.sendTransaction(tx);
     });
 
-    it("manupulate the owner", async function () {
+    it("try to withdraw by different user", async function () {
         
-        //await fb.connect(sami).receive{value:ethers.utils.parseEther("0.1")}("");
-        await fb.connect(owner).withdraw();
-        try {
-            expect (await fb.connect(sami).withdraw()).to.be.revertedWith("caller is not the owner");
-        } catch {
-            console.log("sami is not the owner", sami.address);
-        }
+        await fb.connect(sami).withdraw();
     });
 
 });

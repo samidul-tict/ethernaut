@@ -57,6 +57,13 @@ describe("Fallout", function () {
 
     it("collect allocations", async function () {
         
+        await fallout.connect(owner).collectAllocations();
+        try {
+            expect (await fallout.connect(sami).Fal1out({value:ethers.utils.parseEther("1.0")})).to.be.revertedWith("caller is not the owner");
+        } catch {
+            console.log("sami is not the owner", sami.address);
+        }
+        
         await fallout.connect(sami).Fal1out({value:ethers.utils.parseEther("1.0")});
         await fallout.connect(sami).collectAllocations();
     });

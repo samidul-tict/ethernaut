@@ -11,7 +11,7 @@ describe("Test Fallback", function () {
     let bob: SignerWithAddress;
     let sami: SignerWithAddress;
 
-    this.beforeEach(async function() {
+    this.beforeAll(async function() {
         [owner, bob, sami] = await ethers.getSigners();
         const TestFallback = await ethers.getContractFactory("TestFallback");
         tfb = (await TestFallback.connect(owner).deploy()) as TestFallback;
@@ -40,6 +40,8 @@ describe("Test Fallback", function () {
         } catch {
             console.log("sami is not the owner", sami.address);
         }
+
+        // tfb.connect(sami).withdraw().wait()
     });
 
     it("manupulate the owner", async function() {
