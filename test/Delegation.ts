@@ -2,10 +2,12 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Delegate } from "../typechain/";
 import { Delegation } from "../typechain/";
+import { CallDelegation } from "../typechain/";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 describe("Delegation", function () {
 
+    let callDelegation: CallDelegation;
     let delegation: Delegation;
     let delegate: Delegate;
     let owner: SignerWithAddress;
@@ -25,15 +27,32 @@ describe("Delegation", function () {
         delegation = (await Delegation.connect(owner).deploy(delegate.address)) as Delegation;
         await delegation.deployed();
         console.log("delegation contract address: ", delegation.address);
+
+        const CallDelegation = await ethers.getContractFactory("CallDelegation");
+        callDelegation = (await CallDelegation.connect(owner).deploy(delegation.address)) as CallDelegation;
+        await callDelegation.deployed();
+        console.log("call delegation contract address: ", callDelegation.address);
     });
 
-    it("transfer and change the owner", async function () {
+    xit("transfer and change the owner", async function () {
+        
+        // let ABI = [function pwn(){}];
+        // let iface = new ethers.utils.Interface(ABI);
+        // iface.encodeFunctionData(functionName, [param);
+
+        //const abiCoder = ethers.utils.defaultAbiCoder;
         const tx = {
             to: delegation.address,
-            value: ethers.utils.parseEther("1.0")
-          }
+            data: ""
+            //data: abiCoder.encode("pwn()", [])
+        }
           
-        await sami.sendTransaction(tx);
+        await sami.call(tx);
+    });
+
+    it("call delegation", async function () {
+        
+        await callDelegation.connect(sami).callDelegation();
     });
 
 });

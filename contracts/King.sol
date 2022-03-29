@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
+import "hardhat/console.sol";
+
 contract King {
 
     address payable king;
@@ -21,6 +23,7 @@ contract King {
     }
 
     function _king() public view returns (address payable) {
+        //console.log("new king: ", king);
         return king;
     }
 

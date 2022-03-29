@@ -13,7 +13,8 @@ contract Delegate {
   }
 
   function pwn() public {
-    console.log("within pwn() of Delegate contract");
+    console.log("within pwn() of Delegate contract: ", tx.origin, msg.sender);
     owner = msg.sender;
+    console.log("after chaning the owner: ", owner);
   }
 }
