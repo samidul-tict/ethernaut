@@ -46,7 +46,6 @@ describe("Denial", function () {
     });
 
     it("withdraw by partner", async function () {
-        
         await denial.connect(owner).withdraw();
     });
 
