@@ -4,7 +4,7 @@ import { Force } from "../typechain";
 import { Denial } from "../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-describe("Force", function () {
+describe("Denial", function () {
 
     let force: Force;
     let denial: Denial;
